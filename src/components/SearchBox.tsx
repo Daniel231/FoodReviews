@@ -19,7 +19,8 @@ const useStyles = makeStyles(() =>
 );
 
 interface ISearchBoxProps {
-    placeholder: string
+    placeholder: string,
+    onChange: (value: string) => void
 }
 
 const CustomTextField = withStyles({
@@ -30,13 +31,17 @@ const CustomTextField = withStyles({
     },
   })(TextField);
 
-const SearchBox = ({placeholder}:ISearchBoxProps) => {
+const SearchBox = ({placeholder, onChange}:ISearchBoxProps) => {
   const classes = useStyles();
+
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    onChange(event.target.value as string);
+  };
 
   return (
       <Grid container>
         <Grid item>
-            <CustomTextField label={placeholder} variant="outlined"/>
+            <CustomTextField label={placeholder} onChange={handleChange} variant="outlined"/>
         </Grid>
         <Grid item>
             <IconButton className={classes.iconContainer}>

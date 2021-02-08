@@ -6,6 +6,9 @@ import FastfoodRounded from '@material-ui/icons/FastfoodRounded';
 
 import DropDown from '../../components/DropDown'
 import SearchBox from '../../components/SearchBox'
+import { useDispatch, useSelector } from 'react-redux';
+import { setReviewsFilters } from '../../store/actions/reviews-list-actions';
+import { IRootState } from '../../interfaces';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,6 +29,20 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Filters = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const score = useSelector((state: IRootState) => state.ReviewsList.score);
+    
+    const dropDownScoreOptions = [
+      {value: '1',label: "One"},
+      {value: '2',label: "Two"},
+      {value: '3',label: "Three"},
+      {value: '4',label: "Four"},
+      {value: '5',label: "Five"}
+    ]
+
+    const handleChange = (type: string) => (value: string) => {
+      dispatch(setReviewsFilters(type, value));
+    }
 
     return (
         <Grid container spacing={2} className={classes.filtersContainer}>
@@ -33,7 +50,7 @@ const Filters = () => {
             <IconButton className={classes.iconContainer}>
               <GradeOutlined />
             </IconButton>
-            <DropDown placeholder="Filter by score" />
+            <DropDown placeholder="Filter by score" options={dropDownScoreOptions} onChange={handleChange('score')} value={score} />
           </Grid>
           <Grid item>
             <Grid container>
@@ -43,7 +60,7 @@ const Filters = () => {
                 </IconButton>
               </Grid>
               <Grid item>
-                <SearchBox placeholder="Product" />
+                <SearchBox placeholder="Product" onChange={handleChange('productId')} />
               </Grid>
             </Grid>
           </Grid>

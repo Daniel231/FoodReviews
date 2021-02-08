@@ -5,7 +5,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,7 +44,7 @@ const MainLayout = ({children}: IMainLayoutProps) => {
                 <Typography variant="h6">
                     Foods Review!
                 </Typography>
-                <ButtonGroup variant="contained" className={classes.navigationButtonsContainer}>
+                <div className={classes.navigationButtonsContainer}>
                     <Link className={classes.link} to="/">
                         <Button className={classes.navigationButton}>
                             Food List
@@ -61,7 +60,7 @@ const MainLayout = ({children}: IMainLayoutProps) => {
                             Food statistics
                         </Button>
                     </Link>
-                </ButtonGroup>
+                </div>
             </Toolbar>
             </AppBar>
             <div className={classes.childrenContainer}>

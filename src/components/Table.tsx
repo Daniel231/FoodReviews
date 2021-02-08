@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import {Table as MaterialTable} from '@material-ui/core';
@@ -29,6 +28,9 @@ import TableRow from '@material-ui/core/TableRow';
     container: {
       maxHeight: 440,
     },
+    tableHeaderCell: {
+      fontWeight: 'bold'
+    }
   });
 
   interface IColumn {
@@ -39,20 +41,19 @@ import TableRow from '@material-ui/core/TableRow';
   interface ITableProps {
     columns: IColumn[],
     rows: any[],
+    loading?: boolean,
+    page: number,
+    rowsPerPage: number,
+    onCustomActionClick: (event: any) => void,
+    handleChangePage: (newPage: number) => void,
+    totalRows: number
   }
   
-  const Table = ({columns, rows}: ITableProps) => {
+  const Table = ({columns, rows, loading = false, page, rowsPerPage, onCustomActionClick, handleChangePage, totalRows}: ITableProps) => {
     const classes = useStyles();
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
   
-    const handleChangePage = (event: unknown, newPage: number) => {
-      setPage(newPage);
-    };
-  
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
+    const onChangePage = (event: unknown, newPage: number) => {
+      handleChangePage(newPage);
     };
   
     return (
@@ -64,17 +65,24 @@ import TableRow from '@material-ui/core/TableRow';
                 {columns.map((column, index) => (
                   <TableCell
                     key={`${column.label} ${index}`}
+                    className={classes.tableHeaderCell}
                   >
                     {column.label}
                   </TableCell>
                 ))}
-                <TableCell>
+                <TableCell className={classes.tableHeaderCell}>
                   View
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+              {loading ? 
+                <TableRow>
+                  <TableCell>
+                    Loading...
+                  </TableCell>
+                </TableRow>
+              : rows.map((row) => {
                 return (
                   <TableRow hover key={JSON.stringify(row)}>
                     {columns.map((column) => {
@@ -86,7 +94,7 @@ import TableRow from '@material-ui/core/TableRow';
                       );
                     })}
                     <TableCell>
-                      <IconButton>
+                      <IconButton onClick={() => onCustomActionClick(row.id)}>
                         <VisibilityRoundedIcon/>
                       </IconButton>
                     </TableCell>
@@ -97,13 +105,12 @@ import TableRow from '@material-ui/core/TableRow';
           </MaterialTable>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
+          rowsPerPageOptions={[10]}
           component="div"
-          count={rows.length}
+          count={totalRows || 0}
           rowsPerPage={rowsPerPage}
           page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onChangePage={onChangePage}
         />
       </Paper>
     );

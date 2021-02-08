@@ -18,13 +18,13 @@ interface IRatingsStars {
 
 const RatingsStars = ({score, ratingRatio}: IRatingsStars) => {
     const classes = useStyles();
-    const starsAmount = new Array(ratingRatio).fill(0);
+    const starsAmount = new Array(ratingRatio).fill({});
 
     return (
         <Grid container>
             {
                 starsAmount.map((cell, index) => (
-                    <Grid item>
+                    <Grid item key={index}>
                         {
                             index < score ? 
                                 <StarOutlined className={classes.ratingStar} />
