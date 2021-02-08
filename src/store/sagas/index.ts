@@ -3,8 +3,8 @@
  */
 
 import { all } from 'redux-saga/effects'
-import homeSaga from './homeSaga';
+import reviewSaga from './reviewSaga';
 
 export default function* rootSaga() {
-  yield all([homeSaga()])
+  yield all([reviewSaga()])
 }

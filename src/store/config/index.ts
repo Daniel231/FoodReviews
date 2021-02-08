@@ -10,7 +10,7 @@ import rootSaga from '../sagas';
  * 
  * @returns The store object.
  */
-export const configureStore = () => {
+export default () => {
   const sagaMiddleware = createSagaMiddleware()
 
   const store = createStore(
